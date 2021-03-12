@@ -1,5 +1,4 @@
 const {createServer} = require('net');
-const os = require('os');
 const chalk = require('chalk');
 
 const suppr = Buffer.from([0x08]);
@@ -31,7 +30,6 @@ function sendMessageUser(users, message){
 }
 
 server.on('connection', function(socket) {
-    let message = '';
     let usersConnected;
     socket.write('====== Bienvenu sur le Tchat TCP ======\n\n\r');
     allUsers.push(socket);
@@ -41,27 +39,8 @@ server.on('connection', function(socket) {
     connectedUser(usersConnected, socket);
     socket.on('data', data => {
         usersConnected = allUsers.filter(user => user !== socket);
-        if(os.platform() === 'win32'){
-          if(data.compare(suppr) === 0){
-            const messageArray = message.split('');
-            console.log('message suppr:', messageArray);
-            messageArray.splice(messageArray.length-1, 1);
-            message = messageArray.join('');
-            socket.write(`\n\r${message}`);
-          }
-         if(data.compare(enter) === 0){
-            console.log("enter is true");
-            console.log('message on Windows: ', message);
-            sendMessageUser(usersConnected, message);
-            message = '';
-            socket.write('\n\recrivez un message: ');
-         }else if(data.compare(suppr) !== 0){
-            message += data.toString();
-         }
-        } else {
-            sendMessageUser(usersConnected, data.toString());
-            socket.write('ecrivez un message: ');
-        }
+        sendMessageUser(usersConnected, data.toString());
+        socket.write('ecrivez un message: ');
     });
     
 })
