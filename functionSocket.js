@@ -45,9 +45,16 @@ function pseudoUserIsDefined(currentUser, allUsers, usersConnected, nameUsers, d
     if(nameUsers[allUsers.indexOf(currentUser)].trim() === ''){
         pseudo = data.match(regexPseudo);
         if(pseudo !== null){
-            nameUsers[allUsers.indexOf(currentUser)] = pseudo[0];
-            connectionUser(usersConnected, pseudo[0]);
-            currentUser.write('ecrivez un message: ');
+            console.log(nameUsers.indexOf(pseudo));
+            console.log(nameUsers)
+            if(nameUsers.indexOf(pseudo[0]) === -1){
+                nameUsers[allUsers.indexOf(currentUser)] = pseudo[0];
+                connectionUser(usersConnected, pseudo[0]);
+                currentUser.write('ecrivez un message: ');
+            }else{
+                currentUser.write(chalk.red('\n\rpseudo déjà utiliser\n\r'));
+                currentUser.write("Veuillez saisir un pseudo: ");    
+            }
         }else{
             currentUser.write("Veuillez saisir un pseudo: ");
         }

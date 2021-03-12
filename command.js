@@ -13,6 +13,7 @@ const command  = {
             const userTarget = allUsers[indexOfNameUserTarget];
             userTarget.write(chalk.magentaBright(`\n\r${nameUserSender} send you private message: ${message}\n\r`))
             userTarget.write('ecrivez un message: ');
+            currentUser.write('ecrivez un message: ')
         }
     },
 
@@ -20,7 +21,7 @@ const command  = {
         name: 'kickUser',
         cmd: '/kick',
         regex: /^\/kick ([A-Z]+[a-zA-Z0-9]{4,})/,
-        execCommand: (usersName, allUsers, detailsCommand, currentUser, cb) => {
+        execCommand: (usersName, allUsers, detailsCommand, currentUser) => {
             const [cmdString, nameUser] = detailsCommand;
             const indexOfNameUserTarget = usersName.indexOf(nameUser);
             if(nameUser === usersName[allUsers.indexOf(currentUser)]){
@@ -28,6 +29,7 @@ const command  = {
             }else{
                 const userTarget = allUsers[indexOfNameUserTarget];
                 console.log('indexOfNameUserTarget: ', indexOfNameUserTarget);
+                currentUser.write('ecrivez un message: ')
                 userTarget.emit('end');
             }
         }
@@ -35,7 +37,7 @@ const command  = {
 
 }
 
-function execCommandUser(data, currentUser, nameUsers, allUsers){
+function execCommandUser(data, currentUser, nameUsers, allUsers, usersConnected){
     let commandUser;
     let detailsCommand;
     if(commandUser = detectCommand(data)){

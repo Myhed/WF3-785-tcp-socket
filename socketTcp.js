@@ -20,7 +20,7 @@ server.on('connection', function(socket) {
         data = data.toString();
         usersConnected = allUsers.filter(user => user !== socket);
         if(pseudoUserIsDefined(socket, allUsers, usersConnected ,nameUsers, data)){
-            execCommandUser(data, socket, nameUsers, allUsers);
+            execCommandUser(data, socket, nameUsers, allUsers, usersConnected);
         }
     });
 
