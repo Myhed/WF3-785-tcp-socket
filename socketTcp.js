@@ -1,5 +1,4 @@
 const {createServer} = require('net');
-const os = require('os');
 const chalk = require('chalk');
 
 const suppr = Buffer.from([0x08]);
@@ -41,7 +40,6 @@ server.on('connection', function(socket) {
     connectedUser(usersConnected, socket);
     socket.on('data', data => {
         usersConnected = allUsers.filter(user => user !== socket);
-        if(os.platform() === 'win32'){
           if(data.compare(suppr) === 0){
             const messageArray = message.split('');
             console.log('message suppr:', messageArray);
@@ -58,10 +56,6 @@ server.on('connection', function(socket) {
          }else if(data.compare(suppr) !== 0){
             message += data.toString();
          }
-        } else {
-            sendMessageUser(usersConnected, data.toString());
-            socket.write('ecrivez un message: ');
-        }
     });
     
 })
