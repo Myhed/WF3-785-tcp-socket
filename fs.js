@@ -37,11 +37,9 @@ open(path.join(__dirname),'r', function(error) {
         console.log('file or folder doesnt exist')
         return
     }
-
     writeFile(path.join(__dirname, nameFolder), 'toto', function(error) {
         console.log(error);
     });
-
 });
 
 readdir(path.join(__dirname), {}, function(error, files){
@@ -58,3 +56,5 @@ readdir(path.join(__dirname), {}, function(error, files){
         });
     });
 });
+
+
