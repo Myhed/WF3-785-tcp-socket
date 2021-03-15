@@ -1,9 +1,12 @@
 const http = require('http');
 const url = require('url');
 const queryString = require('querystring');
+const { readdir } = require('fs');
 const homeResponse = {
     page: 'home'
 }
+
+
 
 function verifyDataTypeJson(data){
     const jsonParams = data.toString().substr(1, data.toString().length - 2).split(',');
@@ -18,13 +21,16 @@ function verifyDataTypeJson(data){
 }
 
 const server = http.createServer(function(request, response){
-    response.setHeader('content-type', 'application/json');
+    response.setHeader('content-type', 'text/html');
     switch(request.method){
         case 'GET':
             console.log(queryString.parse(request.url, null, null))
             if(request.url === '/'){
+                readdir();
                 response.writeHead(200);
-                response.end(JSON.stringify(homeResponse));
+                //response.end(JSON.stringify(homeResponse));
+                response.end('<h1>Slt</h1> <button onclick="readdir("../toto")">Dossier</button>');
+                
             }
         break;
         case 'POST':
@@ -55,3 +61,4 @@ const server = http.createServer(function(request, response){
 server.listen(8080, () => {
     console.log('server started...');
 })
+

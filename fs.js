@@ -57,4 +57,4 @@ readdir(path.join(__dirname), {}, function(error, files){
     });
 });
 
-
+module.exports = {readdir, open}
