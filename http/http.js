@@ -1,6 +1,7 @@
 const http = require('http');
 const url = require('url');
 const queryString = require('querystring');
+const path = require('path');
 const { readdir } = require('fs');
 const homeResponse = {
     page: 'home'
@@ -21,16 +22,15 @@ function verifyDataTypeJson(data){
 }
 
 const server = http.createServer(function(request, response){
-    response.setHeader('content-type', 'text/html');
+    response.setHeader('content-type', 'application/json');
     switch(request.method){
         case 'GET':
-            console.log(queryString.parse(request.url, null, null))
+            // console.log(queryString.parse(request.url, null, null))
             if(request.url === '/'){
-                readdir();
-                response.writeHead(200);
-                //response.end(JSON.stringify(homeResponse));
-                response.end('<h1>Slt</h1> <button onclick="readdir("../toto")">Dossier</button>');
-                
+                readdir('/home', function(error, files){
+                    response.writeHead(200);
+                    response.end(JSON.stringify({homeDirectory: files}));
+                });
             }
         break;
         case 'POST':
