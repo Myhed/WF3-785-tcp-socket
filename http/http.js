@@ -2,6 +2,7 @@ const http = require('http');
 const url = require('url');
 const queryString = require('querystring');
 const fs = require('fs');
+const {GET} = require('./router');
 
 const htmlHomeResponse = ('<h1>Home<h1>')
 
@@ -12,15 +13,17 @@ const contactResponse = {
     page: 'contact'
 }
 
-const readFileFilm = fs.readFileSync('./films.json').toString()
+// const readFileFilm = fs.readFileSync('./films.json').toString()
 
-const readFileIfExists = (path) => {
-    if(fs.access(`./${path}.json`)){
-        return fs.readFileSync(`./${path}.json`).toString()
-    }else{
-        return "sa marche pas frère"
-    }
-}
+const isExistingRoute = (url) => GET.routes.filter(route => route.nameRoute === url);
+
+// const readFileIfExists = (path) => {
+//     if(fs.access(`./${path}.json`)){
+//         return fs.readFileSync(`./${path}.json`).toString()
+//     }else{
+//         return "sa marche pas frère"
+//     }
+// }
 
 function verifyDataTypeJson(data){
     const jsonParams = data.toString().substr(1, data.toString().length - 2).split(',');
@@ -35,7 +38,7 @@ function verifyDataTypeJson(data){
 }
 
 
-console.log("FILMS RESPONSE : ", readFileFilm)
+// console.log("FILMS RESPONSE : ", readFileFilm)
 
 const server = http.createServer(function(request, response){
 
@@ -43,24 +46,33 @@ const server = http.createServer(function(request, response){
     response.writeHead(200, {'content-type' : 'application/json'})
     switch(request.method){
         case 'GET':
-            console.log("PARSED QUERY : ", queryString.parse(request.url, null, null))
-            if(request.url === '/'){
-                response.writeHead(200);
-                response.end(JSON.stringify(homeResponse));
+            // console.log("PARSED QUERY : ", queryString.parse(request.url, null, null))
+            console.log(request.url)
+            const urlExist = isExistingRoute(request.url);
+            console.log(urlExist);
+            if(urlExist.length > 0){
+                urlExist[0][request.url](request, response);
+            }else{
+                response.end(JSON.stringify({code: 404, message: 'NOT FOUND'}));
             }
-            else if(request.url === '/contact'){
-                response.writeHead(200);
-                response.end(JSON.stringify(contactResponse));
-            }
-            else if(request.url === '/films'){
-                response.writeHead(200);
-                response.write(readFileFilm);
-                response.end()
-            }
-            else{
-                response.writeHead(200);
-                response.end(readFileIfExists(parsedQuery))
-            }
+            // if(request.url === '/'){
+            //     response.writeHead(200);
+            //     response.end(JSON.stringify(homeResponse));
+            // }
+            // else if(request.url === '/contact'){
+            //     response.writeHead(200);
+            //     response.end(JSON.stringify(contactResponse));
+            // }
+            // else if(request.url === '/films'){
+            //     response.writeHead(200);
+            //     response.write(readFileFilm);
+            //     response.end()
+            // }
+            // else{
+            //     response.writeHead(200);
+            //     response.end(readFileIfExists(parsedQuery))
+            // }
+
         break;
         case 'POST':
             if(request.url === '/'){
