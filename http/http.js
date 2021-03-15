@@ -1,8 +1,25 @@
 const http = require('http');
 const url = require('url');
 const queryString = require('querystring');
+const fs = require('fs');
+
+const htmlHomeResponse = ('<h1>Home<h1>')
+
 const homeResponse = {
     page: 'home'
+}
+const contactResponse = {
+    page: 'contact'
+}
+
+const readFileFilm = fs.readFileSync('./films.json').toString()
+
+const readFileIfExists = (path) => {
+    if(fs.access(`./${path}.json`)){
+        return fs.readFileSync(`./${path}.json`).toString()
+    }else{
+        return "sa marche pas frère"
+    }
 }
 
 function verifyDataTypeJson(data){
@@ -17,14 +34,32 @@ function verifyDataTypeJson(data){
     return true;
 }
 
+
+console.log("FILMS RESPONSE : ", readFileFilm)
+
 const server = http.createServer(function(request, response){
-    response.setHeader('content-type', 'application/json');
+
+    const parsedQuery = queryString.parse(request.url, null, null)
+    response.writeHead(200, {'content-type' : 'application/json'})
     switch(request.method){
         case 'GET':
-            console.log(queryString.parse(request.url, null, null))
+            console.log("PARSED QUERY : ", queryString.parse(request.url, null, null))
             if(request.url === '/'){
                 response.writeHead(200);
                 response.end(JSON.stringify(homeResponse));
+            }
+            else if(request.url === '/contact'){
+                response.writeHead(200);
+                response.end(JSON.stringify(contactResponse));
+            }
+            else if(request.url === '/films'){
+                response.writeHead(200);
+                response.write(readFileFilm);
+                response.end()
+            }
+            else{
+                response.writeHead(200);
+                response.end(readFileIfExists(parsedQuery))
             }
         break;
         case 'POST':
