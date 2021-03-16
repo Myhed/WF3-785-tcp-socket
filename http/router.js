@@ -1,5 +1,5 @@
 const fs = require('fs')
-const queryString = require('queryString')
+const querytring = require('querystring')
 const filmsInMemory = []
 const musiqueInMemory = []
 
