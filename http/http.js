@@ -25,6 +25,7 @@ const server = http.createServer(function(request, response){
         urlWithParams = request.url.split('?');
     }
     const url = typeof urlWithParams !== "undefined" ? urlWithParams[0] : request.url;
+    console.log("urlWithParams : ",urlWithParams)
     const urlExist = isExistingRoute(request.method, url);
     if(urlExist.length > 0){
         const urlParams = typeof urlWithParams !== "undefined" ? urlWithParams[1]: null;

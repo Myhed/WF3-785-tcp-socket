@@ -1,6 +1,5 @@
 const fs = require('fs')
 const querystring = require('querystring');
-const { URLSearchParams } = require('url');
 const filmsInMemory = []
 const musiqueInMemory = []
 
@@ -81,7 +80,10 @@ const router = {
                         'content-type': 'application/json'
                     })
                     const params = querystring.parse(urlParams);
-                    // console.log('queryString parse: ',querytring.parse(new URL(request.url).search));
+                    const foundById = filmsInMemory.find(item => item.id = params.id)
+                    const indexOfItemToUpdate = filmsInMemory.indexOf(foundById)
+                    filmsInMemory[indexOfItemToUpdate].name = params.name
+                    console.log("found : " ,  filmsInMemory.find(item => item.id = params.id));
                     response.end('films...');
                 }
             }
@@ -91,10 +93,16 @@ const router = {
         routes: [
             {
                 nameRoute: '/films',
-                '/films': (request, response) => {
+                '/films': (request, response, urlParams) => {
                     response.writeHead(200, {
                         'content-type': 'application/json'
                     })
+                    const params = querystring.parse(urlParams);
+                    const foundById = filmsInMemory.find(item => item.id = params.id)
+                    const indexOfItemToUpdate = filmsInMemory.indexOf(foundById)
+                    filmsInMemory.splice(indexOfItemToUpdate,1)
+                    console.log("found : " ,  filmsInMemory.find(item => item.id = params.id));
+                    console.log("FILMS IN MEMORY : ", filmsInMemory)
                     response.end('films...');
                 }
             }
