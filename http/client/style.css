@@ -1,0 +1,26 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    background-color: #ccc;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+.containerImg {
+    margin-top: 10px;
+    display: flex;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    margin-right: 10px;
+}
