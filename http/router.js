@@ -9,7 +9,6 @@ function verifyDataTypeJson(data){
     }
     return true;
 }
-
 const router = {
     'GET': {
         routes: [
