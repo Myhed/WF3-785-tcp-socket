@@ -19,11 +19,16 @@ const isExistingRoute = (methodUsed, url) => router[methodUsed].routes.filter(ro
 // console.log("FILMS RESPONSE : ", readFileFilm)
 
 const server = http.createServer(function(request, response){
+    let urlWithParams
     response.writeHead(200, {'content-type' : 'application/json'})
-    const urlExist = isExistingRoute(request.method,request.url);
-    console.log(urlExist);
+    if(request.url.match(/\/[\w]+(\?[\w&=]+)/i) !== null){
+        urlWithParams = request.url.split('?');
+    }
+    const url = typeof urlWithParams !== "undefined" ? urlWithParams[0] : request.url;
+    const urlExist = isExistingRoute(request.method, url);
     if(urlExist.length > 0){
-        urlExist[0][request.url](request, response);
+        const urlParams = typeof urlWithParams !== "undefined" ? urlWithParams[1]: null;
+        urlExist[0][url](request, response, urlParams);
     }else{
         response.end(JSON.stringify({code: 404, message: 'NOT FOUND'}));
     }

@@ -1,5 +1,6 @@
 const fs = require('fs')
-const querytring = require('querystring')
+const querystring = require('querystring');
+const { URLSearchParams } = require('url');
 const filmsInMemory = []
 const musiqueInMemory = []
 
@@ -45,7 +46,7 @@ const router = {
                     response.writeHead(200, {
                         'content-type': 'application/json'
                     })
-                    request.on('data', (data)=>{
+                    request.on('data', (data) => {
                         console.log(JSON.parse(data.toString()))
                         filmsInMemory.push(JSON.parse(data.toString()))
                         console.log("FILMS IN MEMORY : ", filmsInMemory)
@@ -75,15 +76,12 @@ const router = {
         routes: [
             {
                 nameRoute: '/films',
-                '/films': (request, response) => {
+                '/films': (request, response, urlParams) => {
                     response.writeHead(200, {
                         'content-type': 'application/json'
                     })
-                    request.on('data', (data)=>{
-                        console.log(JSON.parse(data.toString()))
-                        console.log("FILMS IN MEMORY : ", filmsInMemory)
-                    })
-                    
+                    const params = querystring.parse(urlParams);
+                    // console.log('queryString parse: ',querytring.parse(new URL(request.url).search));
                     response.end('films...');
                 }
             }
